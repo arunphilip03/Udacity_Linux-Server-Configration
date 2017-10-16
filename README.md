@@ -283,7 +283,7 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	Create file `catalogApp.conf` in `/etc/apache2/sites-available`
 
 	```
-	sudo vi /etc/apache2/sites-available/catalogApp.conf
+	sudo vi /etc/apache2/sites-available/CatalogApp.conf
 	```
 
 	Add the following configuration in the new file:
@@ -321,10 +321,15 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	sudo a2dissite 000-default.conf
 	```
 
-	Enable the `catalogApp.conf`
+	Enable the `CatalogApp.conf`
 
 	```
-	sudo a2ensite catalogApp
+	sudo a2ensite CatalogApp
+	```
+
+	Disable auto index of application directory
+	```
+	sudo a2dismod autoindex
 	```
 
 	Reload apache service for changes to take effect
@@ -350,10 +355,9 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	import sys
 	import logging
 	logging.basicConfig(stream=sys.stderr)
-	sys.path.insert(0, '/var/www/CatalogApp')
+	sys.path.insert(0, "/var/www/"")
 
-	from catalog import app as application
-
+	from CatalogApp import app as application
 	application.secret_key = 'super_secret_key'
 
 	```
