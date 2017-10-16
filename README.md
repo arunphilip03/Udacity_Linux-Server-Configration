@@ -95,29 +95,29 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	Enter a password for user `grader` when prompted.
 
 	* Give grader permission to `sudo`
-	Create a new file named `grader` in `sudoers.d` directory
+	Create a new file named `grader-rules` in `sudoers.d` directory
 	
 	```
-		sudo vi /etc/sudoers.d/grader
+		sudo vi /etc/sudoers.d/grader-rules
 	```
 	Add the following line in the new file
 	```
-	grader ALL=(ALL:ALL) ALL
+	# User rules for grader
+	grader ALL=(ALL) NOPASSWD:ALL	
 	```
 
-	* Create SSH key-pair for grader
+	* Create SSH key-pair for grader locally
 	
 	```
-	su - grader
 	ssh-keygen
+	```
 
-	Generating public/private rsa key pair.
-	Enter file in which to save the key (/home/grader/.ssh/id_rsa):
-	Created directory '/home/grader/.ssh'.
-	Enter passphrase (empty for no passphrase):
-	Enter same passphrase again:
-	Your identification has been saved in /home/grader/.ssh/id_rsa.
-	Your public key has been saved in /home/grader/.ssh/id_rsa.pub.
+	Copy contents of the public key of `grader` to `/home/grader/.ssh/authorized_keys` in server
+
+	Change file permission of `authorized_keys`
+
+	```
+	chmod 644 /home/grader/.ssh/authorized_keys
 	```
 
 	* Disable Password Authentication and remote login of `root` user
@@ -141,7 +141,7 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	* User `grader` can use the following command to login with the SSH key provided
 	
 	```
-	ssh -i grader_key grader@13.126.115.120 -p 2200
+	ssh -i grader_key.txt grader@13.126.115.120 -p 2200
 	```
 
 5. Prepare server to deploy web application
@@ -182,7 +182,7 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	* Install required python packages.
 
 	```
-	sudo pip install -r requirements
+	sudo pip install -r requirements.txt
 	```
 
 	* Install PostgreSQL
@@ -321,7 +321,7 @@ Use command `sudo reboot` in case system restart is required after upgrade.
 	sudo a2dissite 000-default.conf
 	```
 
-	Enable the `CatalogApp.conf`
+	Enable the new `CatalogApp` virtual host configuration
 
 	```
 	sudo a2ensite CatalogApp
